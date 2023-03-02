@@ -3,6 +3,22 @@
 import { Card, Icon, Text } from "@ui-kitten/components";
 import { Cattle } from "src/types";
 import { HourText } from "./HourText";
+import styled from "styled-components/native";
+
+const StyledCard = styled.View`
+  width: 65px;
+  height: 65px;
+  border-radius: 10px;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  background-color: #f0f1f3;
+`;
+
+const CattleName = styled(Text)`
+  font-weight: bold;
+  text-align: center;
+`;
 
 type Props = {
   cattle: Cattle;
@@ -17,8 +33,8 @@ export const HeatItem: React.FC<Props> = (props) => {
   const { cattle } = props;
   const { cattleName, firstDetectedAt, status } = cattle;
   return (
-    <Card>
-      <Text>{cattleName}</Text>
+    <StyledCard>
+      <CattleName>{cattleName}</CattleName>
       {status === "DETECTED" ? (
         <HourText date={firstDetectedAt} />
       ) : (
@@ -28,6 +44,6 @@ export const HeatItem: React.FC<Props> = (props) => {
           name={iconMap[status]}
         />
       )}
-    </Card>
+    </StyledCard>
   );
 };

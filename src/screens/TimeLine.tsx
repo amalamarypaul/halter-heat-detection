@@ -6,15 +6,12 @@ import { getCattles } from "src/apis/timeline";
 import { HeatItem } from "src/components";
 import { useCattleGrouping } from "src/hooks";
 import dayjs from "dayjs";
+import { HeatBlock } from "src/components/HeatBlock";
+import { ScrollView } from "react-native";
 
-const Container = styled(Layout)`
-  flex: 1;
+const Container = styled.ScrollView`
   background-color: white;
-  align-items: center;
-  justify-content: space-between;
   padding: 10px;
-  flex-direction: row;
-  flex-wrap: wrap;
 `;
 
 const getDateLabel = (date: string) => {
@@ -47,18 +44,14 @@ const TimeLine = () => {
   }, []);
   return (
     <Container>
-      {unconfirmedCattles.map((cattle) => (
-        <HeatItem cattle={cattle} key={cattle.id} />
-      ))}
+      <HeatBlock cattles={unconfirmedCattles} label="Unconfirmed heat" />
 
       {dates.map((date) => {
         return (
-          <Layout>
-            <Text>{getDateLabel(date)}</Text>
-            {dateBasedGrouping[date].map((cattle) => (
-              <HeatItem cattle={cattle} key={cattle.id} />
-            ))}
-          </Layout>
+          <HeatBlock
+            cattles={dateBasedGrouping[date]}
+            label={getDateLabel(date)}
+          />
         );
       })}
     </Container>
