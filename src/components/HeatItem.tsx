@@ -2,14 +2,10 @@
 
 import { Card, Icon, Text } from "@ui-kitten/components";
 import { Cattle } from "src/types";
+import { HourText } from "./HourText";
 
 type Props = {
   cattle: Cattle;
-};
-
-const getTimeElapsed = (timestamp: Date) => {
-  // TODO Calculate the time difference between the input and now
-  return "12h";
 };
 
 const iconMap = {
@@ -24,7 +20,7 @@ export const HeatItem: React.FC<Props> = (props) => {
     <Card>
       <Text>{cattleName}</Text>
       {status === "DETECTED" ? (
-        <Text>{getTimeElapsed(firstDetectedAt)}</Text>
+        <HourText date={firstDetectedAt} />
       ) : (
         <Icon
           style={{ width: 20, height: 20 }}
