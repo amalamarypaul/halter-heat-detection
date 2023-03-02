@@ -3,6 +3,7 @@ import styled from "styled-components/native";
 import { Layout, Card, Text } from "@ui-kitten/components";
 import { useAppDispatch, useAppSelector } from "src/store/store";
 import { getCattles } from "src/apis/timeline";
+import { HeatItem } from "src/components";
 
 const Container = styled(Layout)`
   flex: 1;
@@ -25,10 +26,7 @@ const TimeLine = () => {
   return (
     <Container>
       {cattleList.map((cattle) => (
-        <CattleCard key={cattle.id}>
-          <Text>{cattle.cattleName}</Text>
-          <Text>{cattle.status}</Text>
-        </CattleCard>
+        <HeatItem cattle={cattle} key={cattle.id} />
       ))}
     </Container>
   );
