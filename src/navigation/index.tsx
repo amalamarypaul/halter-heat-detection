@@ -11,7 +11,11 @@ const RootStack = createNativeStackNavigator<RootStackParamList>();
 const RootNavigation = () => {
   return (
     <RootStack.Navigator initialRouteName="TimeLine">
-      <RootStack.Screen name="TimeLine" component={TimeLine} />
+      <RootStack.Screen
+        name="TimeLine"
+        component={TimeLine}
+        options={{ headerShown: false }}
+      />
     </RootStack.Navigator>
   );
 };
