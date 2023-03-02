@@ -1,13 +1,11 @@
 import { useEffect } from "react";
 import styled from "styled-components/native";
-import { Layout, Card, Text } from "@ui-kitten/components";
+import { Card } from "@ui-kitten/components";
 import { useAppDispatch, useAppSelector } from "src/store/store";
 import { getCattles } from "src/apis/timeline";
-import { HeatItem } from "src/components";
 import { useCattleGrouping } from "src/hooks";
 import dayjs from "dayjs";
 import { HeatBlock } from "src/components/HeatBlock";
-import { ScrollView } from "react-native";
 
 const Container = styled.ScrollView`
   background-color: white;
