@@ -4,8 +4,10 @@ import { Card, Icon, Text } from "@ui-kitten/components";
 import { Cattle } from "src/types";
 import { HourText } from "./HourText";
 import styled from "styled-components/native";
+import { useAppDispatch } from "src/store/store";
+import { selectCow } from "src/store/timelineSlice";
 
-const StyledCard = styled.View`
+const StyledCard = styled.TouchableOpacity`
   width: 65px;
   height: 65px;
   border-radius: 10px;
@@ -32,8 +34,14 @@ const iconMap = {
 export const HeatItem: React.FC<Props> = (props) => {
   const { cattle } = props;
   const { cattleName, firstDetectedAt, status } = cattle;
+
+  const dispatch = useAppDispatch();
+
+  const onPressCattle = () => {
+    dispatch(selectCow(cattle));
+  };
   return (
-    <StyledCard>
+    <StyledCard onPress={onPressCattle}>
       <CattleName>{cattleName}</CattleName>
       {status === "DETECTED" ? (
         <HourText date={firstDetectedAt} />

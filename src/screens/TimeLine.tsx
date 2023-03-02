@@ -1,17 +1,26 @@
 import { useEffect } from "react";
 import styled from "styled-components/native";
-import { Card } from "@ui-kitten/components";
 import { useAppDispatch, useAppSelector } from "src/store/store";
 import { getCattles, getCattlesStats } from "src/apis/timeline";
 import { useCattleGrouping } from "src/hooks";
 import dayjs from "dayjs";
-import { HeatBlock, StatWrapper } from "src/components";
+import { HeatBlock, StatWrapper, CattleHeatDetails } from "src/components";
 
-const Container = styled.ScrollView`
-  background-color: white;
+const Container = styled.ScrollView<{ $shouldBlur?: boolean }>`
+  background-color: #fff;
   padding: 10px;
+  opacity: ${(props) => (props.$shouldBlur ? 0.8 : 1)};
+  z-index: -10;
 `;
-
+const Overlay = styled.View`
+  background-color: rgba(0,0,0,0.4)
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  top: 0px;
+  left: 0px;
+  position: absolute;
+`;
 const getDateLabel = (date: string) => {
   const today = dayjs();
   const incomingDate = dayjs(date);
@@ -25,11 +34,10 @@ const getDateLabel = (date: string) => {
   return incomingDate.format("ddd, DD MMM");
 };
 
-const CattleCard = styled(Card)``;
 const TimeLine = () => {
   const dispatch = useAppDispatch();
 
-  const { statsData } = useAppSelector((state) => state.timeline);
+  const { statsData, selectedCow } = useAppSelector((state) => state.timeline);
 
   const { dateBasedGrouping, unconfirmedCattles } = useCattleGrouping();
 
@@ -42,20 +50,24 @@ const TimeLine = () => {
     dispatch(getCattlesStats());
   }, []);
   return (
-    <Container>
-      <StatWrapper heatStats={statsData} />
-      <HeatBlock cattles={unconfirmedCattles} label="Unconfirmed heat" />
+    <>
+      <Container $shouldBlur={!!selectedCow}>
+        <StatWrapper heatStats={statsData} />
+        <HeatBlock cattles={unconfirmedCattles} label="Unconfirmed heat" />
 
-      {dates.map((date) => {
-        return (
-          <HeatBlock
-            key={date}
-            cattles={dateBasedGrouping[date]}
-            label={getDateLabel(date)}
-          />
-        );
-      })}
-    </Container>
+        {dates.map((date) => {
+          return (
+            <HeatBlock
+              key={date}
+              cattles={dateBasedGrouping[date]}
+              label={getDateLabel(date)}
+            />
+          );
+        })}
+      </Container>
+      {!!selectedCow && <CattleHeatDetails />}
+      {!!selectedCow && <Overlay />}
+    </>
   );
 };
 export default TimeLine;

@@ -3,7 +3,7 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 
 import type { RootState } from "./store";
 
-import { CattleList, StatisticsData } from "src/types";
+import { Cattle, CattleList, StatisticsData } from "src/types";
 import { getCattles, getCattlesStats } from "src/apis/timeline";
 
 // Define a type for the slice state
@@ -11,6 +11,7 @@ interface TimelineState {
   cattleList: CattleList;
   loading: boolean;
   statsData: StatisticsData;
+  selectedCow: Cattle | null;
 }
 
 // Define the initial state using that type
@@ -18,6 +19,7 @@ const initialState: TimelineState = {
   cattleList: [],
   loading: false,
   statsData: { cowsCycled: "", cowsNotCycled: null },
+  selectedCow: null,
 };
 
 export const timelineSlice = createSlice({
@@ -26,8 +28,17 @@ export const timelineSlice = createSlice({
   initialState,
   reducers: {
     // Use the PayloadAction type to declare the contents of `action.payload`
-    loadCattles: (state, action: PayloadAction<CattleList>) => {
-      state.cattleList = action.payload;
+    selectCow: (state, action: PayloadAction<Cattle | null>) => {
+      state.selectedCow = action.payload;
+    },
+    updateCow: (state, action: PayloadAction<Cattle>) => {
+      state.cattleList = state.cattleList.map((cow) => {
+        if (cow.id === action.payload.id) {
+          return action.payload;
+        }
+        return cow;
+      });
+      state.selectedCow = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -46,7 +57,7 @@ export const timelineSlice = createSlice({
   },
 });
 
-export const { loadCattles } = timelineSlice.actions;
+export const { selectCow, updateCow } = timelineSlice.actions;
 
 export const selectCattles = (state: RootState) => state.timeline.cattleList;
 
