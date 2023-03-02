@@ -1,4 +1,7 @@
+import { useEffect } from "react";
 import styled from "styled-components/native";
+import { useAppDispatch, useAppSelector } from "src/store/store";
+import { getCattles } from "src/apis/timeline";
 
 const Container = styled.View`
   flex: 1;
@@ -12,9 +15,18 @@ const Text = styled.Text`
   font-weight: 500;
 `;
 const TimeLine = () => {
+  const dispatch = useAppDispatch();
+
+  const { cattleList } = useAppSelector((state) => state.timeline);
+
+  useEffect(() => {
+    dispatch(getCattles());
+  }, []);
   return (
     <Container>
-      <Text>Timeline</Text>
+      {cattleList.map((cattle) => (
+        <Text key={cattle.id}>{cattle.cattleName}</Text>
+      ))}
     </Container>
   );
 };
