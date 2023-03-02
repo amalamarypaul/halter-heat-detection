@@ -2,10 +2,10 @@ import { useEffect } from "react";
 import styled from "styled-components/native";
 import { Card } from "@ui-kitten/components";
 import { useAppDispatch, useAppSelector } from "src/store/store";
-import { getCattles } from "src/apis/timeline";
+import { getCattles, getCattlesStats } from "src/apis/timeline";
 import { useCattleGrouping } from "src/hooks";
 import dayjs from "dayjs";
-import { HeatBlock } from "src/components/HeatBlock";
+import { HeatBlock, StatWrapper } from "src/components";
 
 const Container = styled.ScrollView`
   background-color: white;
@@ -29,7 +29,7 @@ const CattleCard = styled(Card)``;
 const TimeLine = () => {
   const dispatch = useAppDispatch();
 
-  const { cattleList } = useAppSelector((state) => state.timeline);
+  const { statsData } = useAppSelector((state) => state.timeline);
 
   const { dateBasedGrouping, unconfirmedCattles } = useCattleGrouping();
 
@@ -39,14 +39,17 @@ const TimeLine = () => {
 
   useEffect(() => {
     dispatch(getCattles());
+    dispatch(getCattlesStats());
   }, []);
   return (
     <Container>
+      <StatWrapper heatStats={statsData} />
       <HeatBlock cattles={unconfirmedCattles} label="Unconfirmed heat" />
 
       {dates.map((date) => {
         return (
           <HeatBlock
+            key={date}
             cattles={dateBasedGrouping[date]}
             label={getDateLabel(date)}
           />

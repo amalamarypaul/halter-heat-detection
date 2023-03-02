@@ -3,19 +3,21 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 
 import type { RootState } from "./store";
 
-import { CattleList } from "src/types";
-import { getCattles } from "src/apis/timeline";
+import { CattleList, StatisticsData } from "src/types";
+import { getCattles, getCattlesStats } from "src/apis/timeline";
 
 // Define a type for the slice state
 interface TimelineState {
   cattleList: CattleList;
   loading: boolean;
+  statsData: StatisticsData;
 }
 
 // Define the initial state using that type
 const initialState: TimelineState = {
   cattleList: [],
   loading: false,
+  statsData: { cowsCycled: "", cowsNotCycled: null },
 };
 
 export const timelineSlice = createSlice({
@@ -37,6 +39,9 @@ export const timelineSlice = createSlice({
     });
     builder.addCase(getCattles.rejected, (state) => {
       state.loading = false;
+    });
+    builder.addCase(getCattlesStats.fulfilled, (state, { payload }) => {
+      state.statsData = payload.stats;
     });
   },
 });

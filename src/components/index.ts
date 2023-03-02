@@ -1,1 +1,2 @@
-export { HeatItem } from "./HeatItem";
+export { HeatBlock } from "./HeatBlock";
+export { StatWrapper } from "./StatWrapper";

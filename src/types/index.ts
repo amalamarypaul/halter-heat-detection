@@ -7,12 +7,17 @@ export type Symptom =
   | "EXCITABLE"
   | "RIDING"
   | "STANDING";
-export interface Cattle {
+export type Cattle = {
   cattleName: string;
   firstDetectedAt: Date;
   id: string;
   status: "DETECTED" | "ON_HEAT" | "NOT_ON_HEAT";
   symptoms: Symptom[];
-}
+};
 
 export type CattleList = Cattle[];
+
+export type StatisticsData = {
+  cowsCycled: string;
+  cowsNotCycled: number | null;
+};
