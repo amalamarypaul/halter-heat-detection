@@ -3,7 +3,7 @@ import styled from "styled-components/native";
 import { Button, CheckBox, Text } from "@ui-kitten/components";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import { RootState, useAppSelector, useAppDispatch } from "src/store/store";
-import { selectCow, updateCow } from "src/store/timelineSlice";
+import { finishLoading, selectCow, updateCow } from "src/store/timelineSlice";
 import { Cattle, Symptom } from "src/types";
 import { CattleSymptoms } from "./CattleSymptoms";
 import { CattleHeatStatusBlock } from "./CattleHeatStatusBlock";
@@ -62,6 +62,10 @@ export const CattleHeatDetails: React.FC<Props> = (props) => {
     if (selectedCow) {
       const updatedCattle = { ...selectedCow, symptoms, status };
       dispatch(updateCow(updatedCattle));
+
+      setTimeout(() => {
+        dispatch(finishLoading());
+      }, 200);
     }
   };
   const handleChangeSymptoms = (symptoms: Symptom[]) => {

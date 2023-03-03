@@ -32,6 +32,7 @@ export const timelineSlice = createSlice({
       state.selectedCow = action.payload;
     },
     updateCow: (state, action: PayloadAction<Cattle>) => {
+      state.loading = true;
       state.cattleList = state.cattleList.map((cow) => {
         if (cow.id === action.payload.id) {
           return action.payload;
@@ -40,7 +41,11 @@ export const timelineSlice = createSlice({
       });
       state.selectedCow = null;
     },
+    finishLoading: (state, action: PayloadAction) => {
+      state.loading = false;
+    },
   },
+
   extraReducers: (builder) => {
     builder.addCase(getCattles.pending, (state) => {
       state.loading = true;
@@ -58,7 +63,7 @@ export const timelineSlice = createSlice({
   },
 });
 
-export const { selectCow, updateCow } = timelineSlice.actions;
+export const { selectCow, updateCow, finishLoading } = timelineSlice.actions;
 
 export const selectCattles = (state: RootState) => state.timeline.cattleList;
 
