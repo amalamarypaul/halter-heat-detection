@@ -7,6 +7,8 @@ import { selectCow, updateCow } from "src/store/timelineSlice";
 import { Cattle, Symptom } from "src/types";
 import { CattleSymptoms } from "./CattleSymptoms";
 import { CattleHeatStatusBlock } from "./CattleHeatStatusBlock";
+import { TitleBar } from "./TitleBar";
+import { HourText } from "./HourText";
 
 type Props = {};
 
@@ -27,6 +29,9 @@ const Divider = styled.View`
   border: 0.5px solid #d4d7da;
   margin-top: 10px;
   margin-bottom: 20px;
+`;
+const BasicText = styled(Text)`
+  color: #abadb0;
 `;
 
 export const CattleHeatDetails: React.FC<Props> = (props) => {
@@ -78,7 +83,16 @@ export const CattleHeatDetails: React.FC<Props> = (props) => {
         <Container>
           {selectedCow && (
             <>
-              <Text>Awesome 🔥 {selectedCow?.cattleName || ""}</Text>
+              <TitleBar
+                title={`Cow ${selectedCow.cattleName || ""}`}
+                additionalInfo={
+                  <Text>
+                    <BasicText> First detected </BasicText>
+                    <HourText date={selectedCow.firstDetectedAt} />
+                    {""} ago
+                  </Text>
+                }
+              />
               <CattleSymptoms
                 symptoms={symptoms}
                 handleChange={handleChangeSymptoms}
