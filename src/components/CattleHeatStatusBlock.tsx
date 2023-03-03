@@ -49,9 +49,7 @@ export const CattleHeatStatusBlock: React.FC<Props> = (props) => {
           No
         </StyledButton>
         <StyledButton
-          status={
-            status === "DETECTED" || status === "ON_HEAT" ? "primary" : "basic"
-          }
+          status={status === "ON_HEAT" ? "primary" : "basic"}
           onPress={() => onChangeCheck("ON_HEAT")}
         >
           Yes

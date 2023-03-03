@@ -45,14 +45,11 @@ export const CattleHeatDetails: React.FC<Props> = (props) => {
   useEffect(() => {
     if (selectedCow) {
       setSymptoms(selectedCow.symptoms);
-      const heatStatus =
-        selectedCow.status === "NOT_ON_HEAT" ? "NOT_ON_HEAT" : "ON_HEAT";
-      setStatus(heatStatus);
+      setStatus(selectedCow.status);
     }
   }, [selectedCow]);
   const sheetRef = useRef<BottomSheet>(null);
 
-  // variables
   const snapPoints = ["60%"];
 
   const onCloseBottomSheet = () => {
