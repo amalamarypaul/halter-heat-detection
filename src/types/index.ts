@@ -1,7 +1,7 @@
 export type Symptom =
   | "HEAT_MOUNT_DETECTOR"
   | "TAIL_PAINT_RUBBED"
-  | " NEAR_SAG_GROUP"
+  | "NEAR_SAG_GROUP"
   | "VULVA_SIGNS"
   | "ARCHED_BACK"
   | "EXCITABLE"
