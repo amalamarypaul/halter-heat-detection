@@ -6,6 +6,7 @@ import * as eva from "@eva-design/eva";
 import { ApplicationProvider, IconRegistry } from "@ui-kitten/components";
 import { EvaIconsPack } from "@ui-kitten/eva-icons";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { default as theme } from "./theme.json";
 
 import Navigation from "src/navigation";
 import { store } from "src/store/store";
@@ -16,7 +17,7 @@ export default function App() {
     <>
       <IconRegistry icons={EvaIconsPack} />
       <Provider store={store}>
-        <ApplicationProvider {...eva} theme={eva.light}>
+        <ApplicationProvider {...eva} theme={{ ...eva.light, ...theme }}>
           <SafeAreaProvider>
             <GestureHandlerRootView style={{ flex: 1 }}>
               <Navigation />
