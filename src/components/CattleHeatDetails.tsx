@@ -3,10 +3,10 @@ import styled from "styled-components/native";
 import { Button, CheckBox, Text } from "@ui-kitten/components";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
 import { RootState, useAppSelector, useAppDispatch } from "src/store/store";
-import { selectCow } from "src/store/timelineSlice";
-import { symptomsValues } from "src/constants";
-import { Symptom } from "src/types";
+import { selectCow, updateCow } from "src/store/timelineSlice";
+import { Cattle, Symptom } from "src/types";
 import { CattleSymptoms } from "./CattleSymptoms";
+import { CattleHeatStatusBlock } from "./CattleHeatStatusBlock";
 
 type Props = {};
 
@@ -22,9 +22,16 @@ const Container = styled.View`
   padding: 20px;
   z-index: 100;
 `;
+const Divider = styled.View`
+  width: 100%;
+  border: 0.5px solid #d4d7da;
+  margin-top: 10px;
+  margin-bottom: 20px;
+`;
 
 export const CattleHeatDetails: React.FC<Props> = (props) => {
   const [symptoms, setSymptoms] = useState<Symptom[]>([]);
+  const [status, setStatus] = useState<Cattle["status"]>("DETECTED");
   const dispatch = useAppDispatch();
   const selectedCow = useAppSelector(
     (state: RootState) => state.timeline.selectedCow
@@ -33,21 +40,30 @@ export const CattleHeatDetails: React.FC<Props> = (props) => {
   useEffect(() => {
     if (selectedCow) {
       setSymptoms(selectedCow.symptoms);
+      const heatStatus =
+        selectedCow.status === "NOT_ON_HEAT" ? "NOT_ON_HEAT" : "ON_HEAT";
+      setStatus(heatStatus);
     }
   }, [selectedCow]);
   const sheetRef = useRef<BottomSheet>(null);
 
   // variables
-  const snapPoints = ["50%"];
+  const snapPoints = ["60%"];
 
   const onCloseBottomSheet = () => {
     dispatch(selectCow(null));
   };
   const handleDone = () => {
-    dispatch(selectCow(null));
+    if (selectedCow) {
+      const updatedCattle = { ...selectedCow, symptoms, status };
+      dispatch(updateCow(updatedCattle));
+    }
   };
   const handleChangeSymptoms = (symptoms: Symptom[]) => {
     setSymptoms(symptoms);
+  };
+  const handleChangeStatus = (status: Cattle["status"]) => {
+    setStatus(status);
   };
 
   return (
@@ -60,11 +76,24 @@ export const CattleHeatDetails: React.FC<Props> = (props) => {
     >
       <BottomSheetView>
         <Container>
-          <Text>Awesome 🔥 {selectedCow?.cattleName || ""}</Text>
-          <CattleSymptoms
-            symptoms={symptoms}
-            handleChange={handleChangeSymptoms}
-          />
+          {selectedCow && (
+            <>
+              <Text>Awesome 🔥 {selectedCow?.cattleName || ""}</Text>
+              <CattleSymptoms
+                symptoms={symptoms}
+                handleChange={handleChangeSymptoms}
+              />
+
+              <Divider />
+              <CattleHeatStatusBlock
+                status={status}
+                handleChange={handleChangeStatus}
+              />
+
+              <Divider />
+            </>
+          )}
+
           <StyledButton onPress={handleDone}>Done</StyledButton>
         </Container>
       </BottomSheetView>

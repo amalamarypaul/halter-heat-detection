@@ -5,6 +5,7 @@ import { getCattles, getCattlesStats } from "src/apis/timeline";
 import { useCattleGrouping } from "src/hooks";
 import dayjs from "dayjs";
 import { HeatBlock, StatWrapper, CattleHeatDetails } from "src/components";
+import { Spinner } from "@ui-kitten/components";
 
 const Container = styled.ScrollView<{ $shouldBlur?: boolean }>`
   background-color: #fff;
@@ -20,6 +21,11 @@ const Overlay = styled.View`
   top: 0px;
   left: 0px;
   position: absolute;
+`;
+const SpinnerWrapper = styled.View`
+  justify-content: center;
+  align-items: center;
+  padding: 50%;
 `;
 const getDateLabel = (date: string) => {
   const today = dayjs();
@@ -37,7 +43,9 @@ const getDateLabel = (date: string) => {
 const TimeLine = () => {
   const dispatch = useAppDispatch();
 
-  const { statsData, selectedCow } = useAppSelector((state) => state.timeline);
+  const { statsData, selectedCow, loading } = useAppSelector(
+    (state) => state.timeline
+  );
 
   const { dateBasedGrouping, unconfirmedCattles } = useCattleGrouping();
 
@@ -49,25 +57,33 @@ const TimeLine = () => {
     dispatch(getCattles());
     dispatch(getCattlesStats());
   }, []);
-  return (
-    <>
-      <Container $shouldBlur={!!selectedCow}>
-        <StatWrapper heatStats={statsData} />
-        <HeatBlock cattles={unconfirmedCattles} label="Unconfirmed heat" />
+  if (loading) {
+    return (
+      <SpinnerWrapper>
+        <Spinner />
+      </SpinnerWrapper>
+    );
+  } else {
+    return (
+      <>
+        <Container $shouldBlur={!!selectedCow}>
+          <StatWrapper heatStats={statsData} />
+          <HeatBlock cattles={unconfirmedCattles} label="Unconfirmed heat" />
 
-        {dates.map((date) => {
-          return (
-            <HeatBlock
-              key={date}
-              cattles={dateBasedGrouping[date]}
-              label={getDateLabel(date)}
-            />
-          );
-        })}
-      </Container>
-      {!!selectedCow && <CattleHeatDetails />}
-      {!!selectedCow && <Overlay />}
-    </>
-  );
+          {dates.map((date) => {
+            return (
+              <HeatBlock
+                key={date}
+                cattles={dateBasedGrouping[date]}
+                label={getDateLabel(date)}
+              />
+            );
+          })}
+        </Container>
+        {!!selectedCow && <CattleHeatDetails />}
+        {!!selectedCow && <Overlay />}
+      </>
+    );
+  }
 };
 export default TimeLine;

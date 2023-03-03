@@ -38,7 +38,7 @@ export const timelineSlice = createSlice({
         }
         return cow;
       });
-      state.selectedCow = action.payload;
+      state.selectedCow = null;
     },
   },
   extraReducers: (builder) => {
@@ -47,6 +47,7 @@ export const timelineSlice = createSlice({
     });
     builder.addCase(getCattles.fulfilled, (state, { payload }) => {
       state.cattleList = payload.cattles;
+      state.loading = false;
     });
     builder.addCase(getCattles.rejected, (state) => {
       state.loading = false;

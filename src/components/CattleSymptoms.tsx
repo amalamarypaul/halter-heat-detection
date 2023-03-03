@@ -4,7 +4,7 @@ import styled from "styled-components/native";
 import { symptomsValues } from "src/constants";
 
 const StyledCard = styled.View`
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   border: none;
   flex-direction: row;
@@ -50,6 +50,7 @@ export const CattleSymptoms: React.FC<Props> = (props) => {
       {Object.keys(symptomsValues).map((symptom: string) => {
         return (
           <StyledCheckBox
+            key={symptom}
             checked={!!symptoms.find((item) => item === symptom)}
             onChange={(checked) =>
               onChangeCheck(checked, symptom as keyof typeof symptomsValues)
